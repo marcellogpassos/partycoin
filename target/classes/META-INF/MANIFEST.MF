@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: partycoin
+Implementation-Version: 0.1.0
+Built-By: marcello
+Implementation-Vendor-Id: br.com.marcellopassos.partycoin
+Build-Jdk: 1.8.0_161
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/partycoin
+Created-By: Maven Integration for Eclipse
+
