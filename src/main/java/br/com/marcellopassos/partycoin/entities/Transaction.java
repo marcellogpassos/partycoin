@@ -1,5 +1,7 @@
 package br.com.marcellopassos.partycoin.entities;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +12,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "blockchain")
+@Table(name = "transactions")
 public class Transaction {
 
 	@JsonIgnore
@@ -24,15 +26,15 @@ public class Transaction {
 	private String dstWallet;
 
 	@Column(nullable = false)
-	public float value;
+	private float value;
 
 	@Column
-	public String hash;
+	private String hash;
 	@Column(name = "previous_hash")
-	public String previousHash;
+	private String previousHash;
 
-	@Column
-	public long timestamp;
+	@Column(name = "created_at")
+	private Date timestamp;
 
 	public Transaction() {
 
@@ -93,11 +95,11 @@ public class Transaction {
 		this.previousHash = previousHash;
 	}
 
-	public long getTimestamp() {
+	public Date getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(long timestamp) {
+	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -110,7 +112,7 @@ public class Transaction {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((previousHash == null) ? 0 : previousHash.hashCode());
 		result = prime * result + ((srcWallet == null) ? 0 : srcWallet.hashCode());
-		result = prime * result + (int) (timestamp ^ (timestamp >>> 32));
+		result = prime * result + ((timestamp == null) ? 0 : timestamp.hashCode());
 		result = prime * result + Float.floatToIntBits(value);
 		return result;
 	}
@@ -149,7 +151,10 @@ public class Transaction {
 				return false;
 		} else if (!srcWallet.equals(other.srcWallet))
 			return false;
-		if (timestamp != other.timestamp)
+		if (timestamp == null) {
+			if (other.timestamp != null)
+				return false;
+		} else if (!timestamp.equals(other.timestamp))
 			return false;
 		if (Float.floatToIntBits(value) != Float.floatToIntBits(other.value))
 			return false;

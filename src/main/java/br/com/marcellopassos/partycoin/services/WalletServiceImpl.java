@@ -12,7 +12,7 @@ import br.com.marcellopassos.partycoin.exceptions.InsufficientFundsException;
 import br.com.marcellopassos.partycoin.exceptions.NegativeValueException;
 import br.com.marcellopassos.partycoin.exceptions.NotAuthorizedException;
 import br.com.marcellopassos.partycoin.exceptions.SourceDestinationSameException;
-import br.com.marcellopassos.partycoin.repositories.BlockchainRepository;
+import br.com.marcellopassos.partycoin.repositories.TransactionsRepository;
 import br.com.marcellopassos.partycoin.repositories.WalletRepository;
 import br.com.marcellopassos.partycoin.vo.Balance;
 import br.com.marcellopassos.partycoin.vo.SendResult;
@@ -21,7 +21,7 @@ import br.com.marcellopassos.partycoin.vo.SendResult;
 public class WalletServiceImpl implements WalletService {
 
 	@Autowired
-	private BlockchainRepository blockchainRepository;
+	private TransactionsRepository transactionsRepository;
 	@Autowired
 	private WalletRepository walletRepository;
 
@@ -33,7 +33,7 @@ public class WalletServiceImpl implements WalletService {
 	public Balance balance(String walletHash, ApplicationUser user) throws NotAuthorizedException {
 		Wallet wallet = this.getWallet(walletHash);
 		this.validateWalletOwnership(WalletServiceImpl.BALANCE, wallet, user);
-		Float balance = this.blockchainRepository.getBalance(wallet.getHash());
+		Float balance = this.transactionsRepository.getBalance(wallet.getHash());
 		if (balance == null)
 			balance = 0f;
 		return new Balance(wallet.getHash(), balance);
@@ -43,7 +43,7 @@ public class WalletServiceImpl implements WalletService {
 	public Collection<Transaction> transactions(String walletHash, ApplicationUser user) throws NotAuthorizedException {
 		Wallet wallet = this.getWallet(walletHash);
 		this.validateWalletOwnership(WalletServiceImpl.TRANSACTIONS, wallet, user);
-		return this.blockchainRepository.listTransactionsByWallet(wallet.getHash());
+		return this.transactionsRepository.listTransactionsByWallet(wallet.getHash());
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class WalletServiceImpl implements WalletService {
 		Wallet srcWallet = this.getWallet(srcWalletHash);
 		this.validateWalletOwnership(WalletServiceImpl.SEND, srcWallet, user);
 		Wallet dstWallet = this.getWallet(dstWalletHash);
-		String transactionHash = this.blockchainRepository.send(srcWallet.getHash(), dstWallet.getHash(), amount);
+		String transactionHash = this.transactionsRepository.send(srcWallet.getHash(), dstWallet.getHash(), amount);
 		this.validateTransactionHash(transactionHash);
 		return new SendResult(srcWallet.getHash(), dstWallet.getHash(), amount, transactionHash);
 	}

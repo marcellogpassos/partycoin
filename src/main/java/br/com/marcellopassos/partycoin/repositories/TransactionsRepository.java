@@ -7,27 +7,27 @@ import org.springframework.data.repository.CrudRepository;
 
 import br.com.marcellopassos.partycoin.entities.Transaction;
 
-public interface BlockchainRepository extends CrudRepository<Transaction, Long> {
+public interface TransactionsRepository extends CrudRepository<Transaction, Long> {
 
 	@Query(value = ""
 			+ "SELECT "
-				+ "SUM( IF( bloc.src_wallet = ?1, bloc.value * (-1), bloc.value ) ) balance "
+				+ "SUM( CASE WHEN (tran.src_wallet = ?1) THEN (tran.value * (-1)) WHEN (tran.dst_wallet = ?1) THEN (tran.value) ELSE 0 END ) balance "				
 			+ "FROM "
-				+ "blockchain bloc "
+				+ "transactions tran "
 			+ "WHERE "
-				+ "(bloc.src_wallet = ?1) OR (bloc.dst_wallet = ?1)"
+				+ "(tran.src_wallet = ?1) OR (tran.dst_wallet = ?1)"
 			+ "", nativeQuery = true)
 	public Float getBalance(String walletHash);
 	
 	@Query(value = ""
 			+ "SELECT "
-				+ "bloc.* "
+				+ "tran.* "
 			+ "FROM "
-				+ "blockchain bloc "
+				+ "transactions tran "
 			+ "WHERE "
-				+ "(bloc.src_wallet = ?1) OR (bloc.dst_wallet = ?1) "
+				+ "(tran.src_wallet = ?1) OR (tran.dst_wallet = ?1) "
 			+ "ORDER BY "
-				+ "bloc.timestamp DESC"
+				+ "tran.created_at DESC"
 			+ "", nativeQuery = true)
 	public Collection<Transaction> listTransactionsByWallet(String walletHash);
 	

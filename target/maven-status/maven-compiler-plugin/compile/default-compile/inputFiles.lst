@@ -3,7 +3,6 @@
 /home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/security/JWTAuthorizationFilter.java
 /home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/entities/Wallet.java
 /home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/controllers/UserController.java
-/home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/repositories/BlockchainRepository.java
 /home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/exceptions/NegativeValueException.java
 /home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/services/UserService.java
 /home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/repositories/UserRepository.java
@@ -18,6 +17,7 @@
 /home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/services/UserServiceImpl.java
 /home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/exceptions/UserNotFoundException.java
 /home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/security/JWTAuthenticationFilter.java
+/home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/repositories/TransactionsRepository.java
 /home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/vo/Balance.java
 /home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/entities/Transaction.java
 /home/marcello/projetos/partycoin/src/main/java/br/com/marcellopassos/partycoin/services/WalletService.java
