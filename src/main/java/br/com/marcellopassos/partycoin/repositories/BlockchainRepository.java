@@ -27,7 +27,7 @@ public interface BlockchainRepository extends CrudRepository<Transaction, Long> 
 			+ "WHERE "
 				+ "(bloc.src_wallet = ?1) OR (bloc.dst_wallet = ?1) "
 			+ "ORDER BY "
-				+ "bloc.timestamp"
+				+ "bloc.timestamp DESC"
 			+ "", nativeQuery = true)
 	public Collection<Transaction> listTransactionsByWallet(String walletHash);
 	

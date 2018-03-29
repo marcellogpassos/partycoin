@@ -14,11 +14,11 @@ import br.com.marcellopassos.partycoin.vo.SendResult;
 
 public interface WalletService {
 
-	public Balance balance(String walletHash, String key) throws NotAuthorizedException;
+	public Balance balance(String walletHash, ApplicationUser user) throws NotAuthorizedException;
 
-	public Collection<Transaction> transactions(String walletHash, String key) throws NotAuthorizedException;
+	public Collection<Transaction> transactions(String walletHash, ApplicationUser user) throws NotAuthorizedException;
 
-	public SendResult send(String srcWalletHash, String dstWalletHash, float amount, String key)
+	public SendResult send(String srcWalletHash, String dstWalletHash, float amount, ApplicationUser user)
 			throws NotAuthorizedException, NegativeValueException, InsufficientFundsException,
 			SourceDestinationSameException;
 

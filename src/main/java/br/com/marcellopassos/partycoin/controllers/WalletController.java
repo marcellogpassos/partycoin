@@ -33,30 +33,33 @@ public class WalletController {
 	private WalletService walletService;
 	@Autowired
 	private UserService userService;
-	
+
 	@GetMapping(path = "")
 	public Collection<Wallet> getUserWallets() throws UserNotFoundException {
-		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		ApplicationUser user = this.userService.getUserByUsername(username);
-		return this.walletService.getUserWallets(user);
-
+		return this.walletService.getUserWallets(this.getUser());
 	}
 
 	@GetMapping(path = "/{walletHash}/balance")
-	public Balance balance(@PathVariable String walletHash) throws NotAuthorizedException {
-		return this.walletService.balance(walletHash, null);
+	public Balance balance(@PathVariable String walletHash) throws NotAuthorizedException, UserNotFoundException {
+		return this.walletService.balance(walletHash, this.getUser());
 	}
 
 	@GetMapping(path = "/{walletHash}/transactions")
-	public Collection<Transaction> transactions(@PathVariable String walletHash) throws NotAuthorizedException {
-		return this.walletService.transactions(walletHash, null);
+	public Collection<Transaction> transactions(@PathVariable String walletHash)
+			throws NotAuthorizedException, UserNotFoundException {
+		return this.walletService.transactions(walletHash, this.getUser());
 	}
 
 	@PostMapping(path = "/{walletHash}/send")
 	public SendResult send(@PathVariable String walletHash, @RequestParam String dstWalletHash,
 			@RequestParam float amount) throws NotAuthorizedException, NegativeValueException,
-			InsufficientFundsException, SourceDestinationSameException {
-		return this.walletService.send(walletHash, dstWalletHash, amount, null);
+			InsufficientFundsException, SourceDestinationSameException, UserNotFoundException {
+		return this.walletService.send(walletHash, dstWalletHash, amount, this.getUser());
+	}
+
+	private ApplicationUser getUser() throws UserNotFoundException {
+		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return this.userService.getUserByUsername(username);
 	}
 
 }

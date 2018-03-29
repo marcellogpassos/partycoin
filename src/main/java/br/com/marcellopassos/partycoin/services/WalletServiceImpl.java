@@ -30,9 +30,9 @@ public class WalletServiceImpl implements WalletService {
 	private static int SEND = 3;
 
 	@Override
-	public Balance balance(String walletHash, String key) throws NotAuthorizedException {
+	public Balance balance(String walletHash, ApplicationUser user) throws NotAuthorizedException {
 		Wallet wallet = this.getWallet(walletHash);
-		this.validateWalletOwnership(WalletServiceImpl.BALANCE, wallet, key);
+		this.validateWalletOwnership(WalletServiceImpl.BALANCE, wallet, user);
 		Float balance = this.blockchainRepository.getBalance(wallet.getHash());
 		if (balance == null)
 			balance = 0f;
@@ -40,26 +40,21 @@ public class WalletServiceImpl implements WalletService {
 	}
 
 	@Override
-	public Collection<Transaction> transactions(String walletHash, String key) throws NotAuthorizedException {
+	public Collection<Transaction> transactions(String walletHash, ApplicationUser user) throws NotAuthorizedException {
 		Wallet wallet = this.getWallet(walletHash);
-		this.validateWalletOwnership(WalletServiceImpl.TRANSACTIONS, wallet, key);
+		this.validateWalletOwnership(WalletServiceImpl.TRANSACTIONS, wallet, user);
 		return this.blockchainRepository.listTransactionsByWallet(wallet.getHash());
 	}
 
 	@Override
-	public SendResult send(String srcWalletHash, String dstWalletHash, float amount, String key)
+	public SendResult send(String srcWalletHash, String dstWalletHash, float amount, ApplicationUser user)
 			throws NotAuthorizedException, NegativeValueException, InsufficientFundsException,
 			SourceDestinationSameException {
 		Wallet srcWallet = this.getWallet(srcWalletHash);
-		this.validateWalletOwnership(WalletServiceImpl.SEND, srcWallet, key);
+		this.validateWalletOwnership(WalletServiceImpl.SEND, srcWallet, user);
 		Wallet dstWallet = this.getWallet(dstWalletHash);
-
-		System.out.println("sending:" + srcWallet.getHash() + ":" + dstWallet.getHash() + ":" + amount);
 		String transactionHash = this.blockchainRepository.send(srcWallet.getHash(), dstWallet.getHash(), amount);
 		this.validateTransactionHash(transactionHash);
-		System.out.println(
-				"sent:" + srcWallet.getHash() + ":" + dstWallet.getHash() + ":" + amount + ":" + transactionHash);
-
 		return new SendResult(srcWallet.getHash(), dstWallet.getHash(), amount, transactionHash);
 	}
 
@@ -72,14 +67,14 @@ public class WalletServiceImpl implements WalletService {
 		return this.walletRepository.findById(walletHash).get();
 	}
 
-	private boolean validateWalletOwnership(int operation, Wallet wallet, String key) throws NotAuthorizedException {
+	private boolean validateWalletOwnership(int operation, Wallet wallet, ApplicationUser user)
+			throws NotAuthorizedException {
 		if ((operation == WalletServiceImpl.BALANCE)
 				|| (operation == WalletServiceImpl.TRANSACTIONS) && (wallet.getUserId() == null))
 			return true;
-		if (wallet != null)
-			return true;
-		else
+		if (!wallet.getUserId().equals(user.getId()))
 			throw new NotAuthorizedException();
+		return true;
 	}
 
 	private boolean validateTransactionHash(String transactionHash)
