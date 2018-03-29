@@ -18,20 +18,20 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "src_wallet", nullable = false)
+	@Column(name = "src_wallet")
 	private String srcWallet;
-	@Column(name = "dst_wallet", nullable = false)
+	@Column(name = "dst_wallet")
 	private String dstWallet;
 
 	@Column(nullable = false)
 	public float value;
 
-	@Column(unique = true)
+	@Column
 	public String hash;
-	@Column(name = "previous_hash", nullable = false, unique = true)
+	@Column(name = "previous_hash")
 	public String previousHash;
 
-	@Column(nullable = false, unique = true)
+	@Column
 	public long timestamp;
 
 	public Transaction() {

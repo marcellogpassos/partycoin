@@ -33,7 +33,10 @@ public class WalletServiceImpl implements WalletService {
 	public Balance balance(String walletHash, String key) throws NotAuthorizedException {
 		Wallet wallet = this.getWallet(walletHash);
 		this.validateWalletOwnership(WalletServiceImpl.BALANCE, wallet, key);
-		return new Balance(wallet.getHash(), this.blockchainRepository.getBalance(wallet.getHash()));
+		Float balance = this.blockchainRepository.getBalance(wallet.getHash());
+		if (balance == null)
+			balance = 0f;
+		return new Balance(wallet.getHash(), balance);
 	}
 
 	@Override

@@ -19,10 +19,9 @@ public class ApplicationUser {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, unique = true, name = "email")
+	@Column(name = "email")
 	private String username;
-	@JsonIgnore
-	@Column(nullable = false)
+	@Column
 	private String password;
 
 	@Column
@@ -30,9 +29,9 @@ public class ApplicationUser {
 	@Column
 	private String sobrenome;
 
-	@Column(unique = true)
+	@Column
 	private String cpf;
-	@Column(unique = true)
+	@Column
 	private String celular;
 	@Column(name = "data_nascimento")
 	private Date dataNascimento;
@@ -62,16 +61,8 @@ public class ApplicationUser {
 		this.id = id;
 	}
 
-	public String getEmail() {
-		return username;
-	}
-
 	public String getUsername() {
 		return username;
-	}
-
-	public void setEmail(String email) {
-		this.username = email;
 	}
 
 	public void setUsername(String username) {

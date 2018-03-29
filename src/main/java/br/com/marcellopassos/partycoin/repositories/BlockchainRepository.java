@@ -17,7 +17,7 @@ public interface BlockchainRepository extends CrudRepository<Transaction, Long> 
 			+ "WHERE "
 				+ "(bloc.src_wallet = ?1) OR (bloc.dst_wallet = ?1)"
 			+ "", nativeQuery = true)
-	public float getBalance(String walletHash);
+	public Float getBalance(String walletHash);
 	
 	@Query(value = ""
 			+ "SELECT "

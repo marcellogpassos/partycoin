@@ -33,7 +33,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	
 	@Override
 	public SignUpResult signUp(ApplicationUser user) {
-		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+		String cypher = this.passwordEncoder.encode(user.getPassword());
+		user.setPassword(cypher);
 		this.userRepository.save(user);
 		return new SignUpResult(user.getUsername());
 	}

@@ -14,10 +14,10 @@ public class Wallet {
 	@Id
 	private String hash;
 
-	@Column(nullable = false, name = "user_id")
+	@Column(name = "user_id")
 	private Long userId;
 
-	@Column(nullable = false, name = "created_at")
+	@Column(name = "created_at")
 	private Date createdAt;
 
 	public Wallet() {

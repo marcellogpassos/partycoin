@@ -29,7 +29,9 @@ public class UserController {
 	@GetMapping(path = "/my-data")
 	public ApplicationUser myData() throws UserNotFoundException {
 		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return this.userService.getUserByUsername(username);
+		ApplicationUser user = this.userService.getUserByUsername(username);
+		user.setPassword(null);
+		return user;
 	}
 
 }
